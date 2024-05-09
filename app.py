@@ -1,5 +1,45 @@
+import pandas as pd
 import streamlit as st
-from group_by import group_by_keyword, group_by_column_type
+
+@st.cache_data
+def load_data():
+    url = 'https://docs.google.com/spreadsheets/d/1YAEnVA0NlZJXOVPpAZC8EjlUUpm95uJ1wNRi29lhu2I/export?format=csv&gid=0'
+    df = pd.read_csv(url, usecols=[0,1,2,3,4], header=3)
+    df['Time'] = pd.to_datetime(df['Time'], format='%B %d %Y')
+    return df
+
+data_load_state = st.text('Loading data ...')
+
+data = load_data()
+
+data_load_state = st.text('Loading data ... done with catching')
+
+def group_by_keyword(keyword, column_type):
+    df_keyword = data[data['Items'].str.contains(keyword)]
+    df_keyword[column_type] = df_keyword[column_type].astype(int)
+    df_sort = sort_values_by_time(df_keyword, column_type)
+    return df_sort
+
+def group_by_column_type(column_type):
+    df = data.drop(data[data[column_type] == ' '].index)
+    df = df[df[column_type].notna()]
+    df[column_type] = df[column_type].astype(float)
+    df_sort = sort_values_by_time(df, column_type)
+    return df_sort
+
+def sort_values_by_time(data, column_type):
+    df_groupby = (data.groupby(data['Time'].dt.strftime('%Y-%m'))
+                      .agg(total = (column_type, 'sum'))
+                      .reset_index())
+    df_groupby['Time'] = pd.to_datetime(df_groupby['Time'], format='%Y-%m').dt.strftime('%Y-%m')
+    df_groupby.sort_values(by='Time') 
+    return df_groupby
+
+st.header('Blance Sheet Visualization')
+
+if st.checkbox('Show raw data'):
+    st.subheader('Raw data')
+    st.write(data.tail(21))
 
 df_must_have = group_by_column_type('Must Have')
 st.write("Must Have")
@@ -44,6 +84,10 @@ st.bar_chart(df_banhcan.set_index('Time'))
 df_cfe = group_by_keyword("Cfe", 'Nice To Have')
 st.write("Cfe")
 st.bar_chart(df_cfe.set_index('Time'))
+
+df_trung = group_by_keyword("Trứng", 'Nice To Have')
+st.write("Trứng")
+st.bar_chart(df_trung.set_index('Time'))
 
 df_lotter = group_by_keyword("Lotte", 'Nice To Have')
 st.write("Lotte")
