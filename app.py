@@ -8,6 +8,8 @@ def load_data():
     df['Time'] = pd.to_datetime(df['Time'], format='%B %d %Y')
     return df
 
+st.title('Blance Sheet Visualization')
+
 data_load_state = st.text('Loading data ...')
 
 data = load_data()
@@ -35,7 +37,15 @@ def sort_values_by_time(data, column_type):
     df_groupby.sort_values(by='Time') 
     return df_groupby
 
-st.header('Blance Sheet Visualization')
+def bar_chart_by_streamlit(keyword, column_type):
+    df_keyword = group_by_keyword(keyword, column_type)
+    st.write(keyword)
+    st.bar_chart(df_keyword.set_index('Time'))
+
+def bar_chart(column_type):
+    df_column_type = group_by_column_type(column_type)
+    st.write(column_type)
+    st.bar_chart(df_column_type.set_index('Time'))
 
 if st.checkbox('Show raw data'):
     st.subheader('Raw data')
@@ -46,62 +56,20 @@ if st.button("Clear All Cache"):
     # i.e. clear values from both square and cube
     st.cache_data.clear()
 
-df_must_have = group_by_column_type('Must Have')
-st.write("Must Have")
-st.bar_chart(df_must_have.set_index('Time'))
+bar_chart('Must Have')
+bar_chart('Nice To Have')
+bar_chart('Wasted')
 
-df_nice_to_have = group_by_column_type('Nice To Have')
-st.write("Nice To Have")
-st.bar_chart(df_nice_to_have.set_index('Time'))
+bar_chart_by_streamlit("Tiền sinh hoạt chung cư", 'Must Have')
+bar_chart_by_streamlit("Xăng jupiter", 'Must Have')
+bar_chart_by_streamlit("Xăng lead", 'Must Have')
+bar_chart_by_streamlit("Bánh căn", 'Must Have')
 
-df_wasted = group_by_column_type('Wasted')
-st.write("Wasted")
-st.bar_chart(df_wasted.set_index('Time'))
-
-df_money = group_by_keyword("Tiền sinh hoạt chung cư", 'Must Have')
-st.write("Tiền sinh hoạt chung cư")
-st.bar_chart(df_money.set_index('Time'))
-
-df_xang_jupiter = group_by_keyword("Xăng jupiter", 'Must Have')
-st.write("Xăng jupiter")
-st.bar_chart(df_xang_jupiter.set_index('Time'))
-
-df_xang_lead = group_by_keyword("Xăng lead", 'Must Have')
-st.write("Xăng lead")
-st.bar_chart(df_xang_lead.set_index('Time'))
-
-df_vi_tam = group_by_keyword("Vì tâm", 'Nice To Have')
-st.write("Vì tâm")
-st.bar_chart(df_vi_tam.set_index('Time'))
-
-df_dua = group_by_keyword("Dừa", 'Nice To Have')
-st.write("Dừa")
-st.bar_chart(df_dua.set_index('Time'))
-
-df_ve_so = group_by_keyword("Vé số", 'Nice To Have')
-st.write("Vé số")
-st.bar_chart(df_ve_so.set_index('Time'))
-
-df_bivina = group_by_keyword("Bivina", 'Nice To Have')
-st.write("Bivina")
-st.bar_chart(df_bivina.set_index('Time'))
-
-df_banhcan = group_by_keyword("Bánh căn", 'Must Have')
-st.write("Bánh căn")
-st.bar_chart(df_banhcan.set_index('Time'))
-
-df_cfe = group_by_keyword("Cfe", 'Nice To Have')
-st.write("Cfe")
-st.bar_chart(df_cfe.set_index('Time'))
-
-df_trung = group_by_keyword("Trứng", 'Nice To Have')
-st.write("Trứng")
-st.bar_chart(df_trung.set_index('Time'))
-
-df_lotter = group_by_keyword("Lotte", 'Nice To Have')
-st.write("Lotte")
-st.bar_chart(df_lotter.set_index('Time'))
-
-df_winmart = group_by_keyword("Winmart", 'Nice To Have')
-st.write("Winmart")
-st.bar_chart(df_winmart.set_index('Time'))
+bar_chart_by_streamlit("Vì tâm", 'Nice To Have')
+bar_chart_by_streamlit("Dừa", 'Nice To Have')
+bar_chart_by_streamlit("Vé số", 'Nice To Have')
+bar_chart_by_streamlit("Bivina", 'Nice To Have')
+bar_chart_by_streamlit("Cfe", 'Nice To Have')
+bar_chart_by_streamlit("Trứng", 'Nice To Have')
+bar_chart_by_streamlit("Lotte", 'Nice To Have')
+bar_chart_by_streamlit("Winmart", 'Nice To Have')
