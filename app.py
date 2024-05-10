@@ -16,7 +16,7 @@ data_load_state = st.text('Loading data ... done with catching')
 
 def group_by_keyword(keyword, column_type):
     df_keyword = data[data['Items'].str.contains(keyword)]
-    df_keyword[column_type] = df_keyword[column_type].astype(int)
+    df_keyword[column_type] = df_keyword[column_type].astype(float)
     df_sort = sort_values_by_time(df_keyword, column_type)
     return df_sort
 
@@ -57,6 +57,10 @@ st.bar_chart(df_nice_to_have.set_index('Time'))
 df_wasted = group_by_column_type('Wasted')
 st.write("Wasted")
 st.bar_chart(df_wasted.set_index('Time'))
+
+df_money = group_by_keyword("Tiền sinh hoạt chung cư", 'Must Have')
+st.write("Tiền sinh hoạt chung cư")
+st.bar_chart(df_money.set_index('Time'))
 
 df_xang_jupiter = group_by_keyword("Xăng jupiter", 'Must Have')
 st.write("Xăng jupiter")
