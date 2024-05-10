@@ -41,6 +41,11 @@ if st.checkbox('Show raw data'):
     st.subheader('Raw data')
     st.write(data.tail(21))
 
+if st.button("Clear All Cache"):
+    # Clear values from *all* all in-memory and on-disk data caches:
+    # i.e. clear values from both square and cube
+    st.cache_data.clear()
+
 df_must_have = group_by_column_type('Must Have')
 st.write("Must Have")
 st.bar_chart(df_must_have.set_index('Time'))
