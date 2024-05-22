@@ -9,11 +9,8 @@ def load_data():
     return df
 
 st.title('Blance Sheet Visualization')
-
 data_load_state = st.text('Loading data ...')
-
 data = load_data()
-
 data_load_state = st.text('Loading data ... done with catching')
 
 def group_by_keyword(keyword, column_type):
@@ -65,6 +62,7 @@ bar_chart_by_streamlit("Xăng jupiter", 'Must Have')
 bar_chart_by_streamlit("Xăng lead", 'Must Have')
 bar_chart_by_streamlit("Bánh căn", 'Must Have')
 
+bar_chart_by_streamlit("Cắt tóc", 'Nice To Have')
 bar_chart_by_streamlit("Vì tâm", 'Nice To Have')
 bar_chart_by_streamlit("Dừa", 'Nice To Have')
 bar_chart_by_streamlit("Vé số", 'Nice To Have')
